@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import React,{ Component } from 'react';
 import styled from 'styled-components';
+import BootstrapTest from './BootstrapTest';
 
 import './App.css';
 
@@ -78,9 +79,38 @@ const Wrapper = styled.div`
   margin: 80px auto 0 auto;
 `;
 
+const DunamicGreating = (props) => {
+  return (
+    <div className={'mb-3 p-3 border border-' + props.color}>
+        {
+            React.Children.map(props.children, child => {
+                return React.cloneElement(child, {className: 'shadow p-3 m-3 border'})
+            })
+        }
+    </div>
+  )
+}
+
 function App() {
   return (
     <Wrapper>
+      
+
+      <BootstrapTest
+          left = {
+            <DunamicGreating color={'primary'}>
+              <h2>This well was hard</h2>
+              <h2>Hello world!</h2>
+             </DunamicGreating>
+          }
+
+          right = {
+            <DunamicGreating color={'primary'}>
+              <h2>Rigth!</h2>
+             </DunamicGreating>
+          }
+      />
+
         <WhoAmI name='Andrii' surname="Shpontak" link="https://www.facebook.com/andrii.shpontak"/>
         <WhoAmI name='Arthur' surname="Smitt" link="https://www.instagram.com"/>
     </Wrapper>
