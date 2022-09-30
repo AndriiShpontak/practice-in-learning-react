@@ -1,38 +1,34 @@
-import data from './data';
-import {useState, useMemo, useTransition, startTransition} from 'react';
-import { useDeferredValue } from 'react';
+import {useState} from 'react';
+import './App.css';
+import Form from './Form';
+import dataContext from './Context';
+
+
+const {Provider} = dataContext;
 
 function App() {
-    const [text, setText] = useState('');
-    const [posts, setPosts] = useState(data);
-    // const defferedValue = useDeferredValue(text);
-    const [isPanding, startTransition] = useTransition();
+    const [data, setData] = useState({
+        mail: "name@example.com",
+        text: 'some text',
+        forceChangeMail: forceChangeMail
+    });
 
-    const filteredPosts = useMemo(() => {
-        return posts.filter(item => item.name.toLowerCase().includes(text));
-    }, [text]);
-
-    const onValueChange = (e) => {
-      startTransition(() => {
-        setText(e.target.value);
-      })
+    function forceChangeMail() {
+        setData({...data, mail: 'test@example.com'})
     }
 
     return (
-        <>
-            <input value={text} type='text' onChange={onValueChange}/>
-
-            <hr/>
-
-            <div>
-                {isPanding ? <h4>Loading...</h4> : 
-                  filteredPosts.map(post => (
-                    <div key={post._id}>
-                        <h4>{post.name}</h4>
-                    </div>
-                ))} 
-            </div>
-        </>
+        <Provider value={data}>
+            <Form text={data.text}/>
+            <button 
+                onClick={() => setData({
+                    mail: "second@example.com",
+                    text: 'second text',
+                    forceChangeMail: forceChangeMail
+                })}>
+                Click me
+            </button>
+        </Provider>
     );
 }
 
